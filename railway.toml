@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install -g pnpm && pnpm install && pnpm --filter client build && pnpm --filter server build"
+buildCommand = "npx pnpm@9 install && npx pnpm@9 --filter client build && npx pnpm@9 --filter server build"
 
 [deploy]
 startCommand = "NODE_ENV=production node packages/server/dist/app.js"
