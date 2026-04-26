@@ -6,10 +6,17 @@ type Auth = CommandResponse<'authenticate'>;
 let auth: Auth;
 
 // Once setupDiscordSdk is complete, we can assert that "auth" is initialized
-setupDiscordSdk().then(() => {
-	appendVoiceChannelName();
-	appendGuildAvatar();
-});
+setupDiscordSdk()
+	.then(() => {
+		appendVoiceChannelName();
+		appendGuildAvatar();
+	})
+	.catch((err: unknown) => {
+		const app = document.querySelector<HTMLDivElement>('#app');
+		if (app) {
+			app.textContent = `Setup failed: ${err instanceof Error ? err.message : String(err)}`;
+		}
+	});
 
 async function setupDiscordSdk() {
 	await discordSdk.ready();
