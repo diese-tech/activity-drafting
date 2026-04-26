@@ -70,14 +70,18 @@ app.post('/api/draft/start', requireApiKey, (req: Request, res: Response) => {
 	res.json({ matchId: draft.matchId, draftId: draft.draftId, state: draft.toStateSnapshot() });
 });
 
-app.get('/api/draft/:matchId', requireApiKey, (req: Request, res: Response) => {
-	const draft = manager.get(req.params.matchId);
+type MatchParams = { matchId: string };
+
+app.get('/api/draft/:matchId', requireApiKey, (req: Request<MatchParams>, res: Response) => {
+	const { matchId } = req.params;
+	const draft = manager.get(matchId);
 	if (!draft) { res.status(404).json({ error: 'No active draft' }); return; }
 	res.json(draft.toStateSnapshot());
 });
 
-app.post('/api/draft/:matchId/action', requireApiKey, (req: Request, res: Response) => {
-	const draft = manager.get(req.params.matchId);
+app.post('/api/draft/:matchId/action', requireApiKey, (req: Request<MatchParams>, res: Response) => {
+	const { matchId } = req.params;
+	const draft = manager.get(matchId);
 	if (!draft) { res.status(404).json({ error: 'No active draft' }); return; }
 
 	const { god, userId } = req.body as { god: string; userId: string };
@@ -99,40 +103,43 @@ app.post('/api/draft/:matchId/action', requireApiKey, (req: Request, res: Respon
 
 	draft.executeStep(god);
 	const snapshot = draft.toStateSnapshot();
-	broadcastToRoom(req.params.matchId, { type: 'state', state: snapshot });
+	broadcastToRoom(matchId, { type: 'state', state: snapshot });
 	res.json(snapshot);
 });
 
-app.post('/api/draft/:matchId/undo', requireApiKey, (req: Request, res: Response) => {
-	const draft = manager.get(req.params.matchId);
+app.post('/api/draft/:matchId/undo', requireApiKey, (req: Request<MatchParams>, res: Response) => {
+	const { matchId } = req.params;
+	const draft = manager.get(matchId);
 	if (!draft) { res.status(404).json({ error: 'No active draft' }); return; }
 
 	const result = draft.undo();
 	if (!result) { res.status(400).json({ error: 'Nothing to undo' }); return; }
 
 	const snapshot = draft.toStateSnapshot();
-	broadcastToRoom(req.params.matchId, { type: 'state', state: snapshot });
+	broadcastToRoom(matchId, { type: 'state', state: snapshot });
 	res.json(snapshot);
 });
 
-app.post('/api/draft/:matchId/next', requireApiKey, (req: Request, res: Response) => {
-	const draft = manager.get(req.params.matchId);
+app.post('/api/draft/:matchId/next', requireApiKey, (req: Request<MatchParams>, res: Response) => {
+	const { matchId } = req.params;
+	const draft = manager.get(matchId);
 	if (!draft) { res.status(404).json({ error: 'No active draft' }); return; }
 
 	const error = draft.advanceGame();
 	if (error) { res.status(400).json({ error }); return; }
 
 	const snapshot = draft.toStateSnapshot();
-	broadcastToRoom(req.params.matchId, { type: 'state', state: snapshot });
+	broadcastToRoom(matchId, { type: 'state', state: snapshot });
 	res.json(snapshot);
 });
 
-app.post('/api/draft/:matchId/end', requireApiKey, (req: Request, res: Response) => {
-	const draft = manager.end(req.params.matchId);
+app.post('/api/draft/:matchId/end', requireApiKey, (req: Request<MatchParams>, res: Response) => {
+	const { matchId } = req.params;
+	const draft = manager.end(matchId);
 	if (!draft) { res.status(404).json({ error: 'No active draft' }); return; }
 
 	const exportData = draft.toExportDict();
-	broadcastToRoom(req.params.matchId, { type: 'export', export: exportData });
+	broadcastToRoom(matchId, { type: 'export', export: exportData });
 	res.json(exportData);
 });
 
