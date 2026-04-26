@@ -19,6 +19,10 @@ export interface ClientMessage {
 
 const rooms = new Map<string, Set<WebSocket>>();
 
+export function broadcastToRoom(matchId: string, payload: object): void {
+  broadcast(matchId, payload);
+}
+
 function broadcast(matchId: string, payload: object): void {
   const clients = rooms.get(matchId);
   if (!clients) return;
