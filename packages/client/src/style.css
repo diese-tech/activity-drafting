@@ -1,21 +1,172 @@
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: black;
-  background: white;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { width: 100%; height: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1e1f22;
+  color: #dcddde;
+  height: 100vh;
+  overflow: hidden;
 }
 
-html,
-body,
 #app {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* ── Lobby ── */
+.lobby {
+  max-width: 420px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lobby h1 { color: #fff; font-size: 1.4rem; text-align: center; }
+
+.lobby-form { display: flex; flex-direction: column; gap: 8px; }
+.lobby-form label { font-size: 0.75rem; color: #b9bbbe; text-transform: uppercase; }
+.lobby-divider { text-align: center; color: #72767d; font-size: 0.8rem; }
+
+/* ── Inputs & Buttons ── */
+input[type="text"] {
+  background: #2b2d31;
+  border: 1px solid #1e1f22;
+  border-radius: 4px;
+  color: #dcddde;
+  padding: 8px 10px;
+  font-size: 0.9rem;
   width: 100%;
-  height: 100%;
+  outline: none;
+}
+input[type="text"]:focus { border-color: #5865f2; }
+
+button {
+  background: #5865f2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+button:hover { background: #4752c4; }
+button:disabled { background: #4e505b; cursor: not-allowed; }
+
+.btn-secondary { background: #4e505b; font-size: 0.8rem; padding: 4px 10px; }
+.btn-secondary:hover { background: #6d6f78; }
+
+/* ── Board ── */
+.board { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+
+.board-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #2b2d31;
+  border-radius: 6px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.draft-meta { color: #72767d; font-size: 0.8rem; }
+.turn-status { flex: 1; font-size: 0.95rem; }
+.status-turn { color: #dcddde; }
+.status-turn.your-turn { color: #57f287; font-weight: 700; }
+.status-complete { color: #faa61a; }
+
+/* ── Teams ── */
+.board-teams { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.team {
+  background: #2b2d31;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+.team h2 { font-size: 0.95rem; }
+.team-blue h2 { color: #5865f2; }
+.team-red h2 { color: #ed4245; }
+
+.slot-section { display: flex; flex-direction: column; gap: 4px; }
+.slot-label { font-size: 0.7rem; color: #72767d; text-transform: uppercase; }
+.slots { display: flex; flex-direction: column; gap: 3px; }
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  min-height: 28px;
+}
+.slot img { width: 22px; height: 22px; border-radius: 3px; object-fit: cover; }
+.slot.empty { color: #4e505b; background: #1e1f22; }
+.slot-ban.filled { background: #3d1f21; color: #ed4245; }
+.slot-pick.filled { background: #1f2d3d; color: #5865f2; }
+.team-red .slot-pick.filled { background: #3d1f21; color: #ed4245; }
+.claim-name { font-size: 0.7rem; color: #72767d; margin-left: auto; }
+
+/* ── Fearless Pool ── */
+.fearless-pool {
+  background: #2b2d31;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: #faa61a;
+}
+.fearless-pool .label { font-weight: 600; }
+
+/* ── God Selector ── */
+.god-selector {
+  background: #2b2d31;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 120px;
+}
+
+.god-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.god-btn {
+  background: #1e1f22;
+  color: #dcddde;
+  font-size: 0.75rem;
+  font-weight: 400;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+.god-btn:hover:not(:disabled) { background: #5865f2; color: #fff; }
+.god-btn.unavailable { background: #1e1f22; color: #4e505b; text-decoration: line-through; }
+
+/* ── Error / Misc ── */
+.error {
+  background: #3d1f21;
+  color: #ed4245;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+.hidden { display: none; }
+
+.complete { padding: 20px; }
+.complete h1 { margin-bottom: 16px; color: #57f287; }
+.complete pre { font-size: 0.7rem; color: #b9bbbe; white-space: pre-wrap; }
