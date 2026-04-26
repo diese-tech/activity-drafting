@@ -163,9 +163,12 @@ button:disabled { background: #4e505b; cursor: not-allowed; }
   font-weight: 400;
   padding: 4px 8px;
   border-radius: 3px;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .god-btn:hover:not(:disabled) { background: #5865f2; color: #fff; }
-.god-btn.unavailable { background: #1e1f22; color: #4e505b; text-decoration: line-through; }
 
 /* ── Error / Misc ── */
 .error {

@@ -212,11 +212,10 @@ export class DraftBoard {
 
   private renderGodSelector(s: StateSnapshot): string {
     const unavailable = new Set(s.unavailableGods);
-    const godButtons = ALL_GODS.map(god => {
-      const disabled = unavailable.has(god) ? 'disabled' : '';
-      const cls = unavailable.has(god) ? 'god-btn unavailable' : 'god-btn';
-      return `<button class="${cls}" data-god="${god}" ${disabled}>${god}</button>`;
-    }).join('');
+    const godButtons = ALL_GODS
+      .filter(god => !unavailable.has(god))
+      .map(god => `<button class="god-btn" data-god="${god}">${god}</button>`)
+      .join('');
 
     return `
       <div class="god-selector">
@@ -226,16 +225,11 @@ export class DraftBoard {
     `;
   }
 
-  private filterGods(query: string, unavailable: string[]): void {
-    const unavailableSet = new Set(unavailable);
+  private filterGods(query: string, _unavailable: string[]): void {
     const q = query.toLowerCase();
     this.root.querySelectorAll('.god-btn').forEach(btn => {
       const god = (btn as HTMLButtonElement).dataset.god!;
-      const matches = god.toLowerCase().includes(q);
-      (btn as HTMLElement).style.display = matches ? '' : 'none';
-      if (matches && unavailableSet.has(god)) {
-        btn.setAttribute('disabled', '');
-      }
+      (btn as HTMLElement).style.display = god.toLowerCase().includes(q) ? '' : 'none';
     });
   }
 
