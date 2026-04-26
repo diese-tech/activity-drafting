@@ -126,6 +126,16 @@ button:disabled { background: #4e505b; cursor: not-allowed; }
 }
 .fearless-pool .label { font-weight: 600; }
 
+/* ── Game Controls ── */
+.game-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #2b2d31;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
 /* ── God Selector ── */
 .god-selector {
   background: #2b2d31;

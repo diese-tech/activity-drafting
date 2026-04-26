@@ -122,9 +122,6 @@ export class DraftState {
     if (!this.currentGame.isComplete()) {
       return "Current game isn't complete yet. Finish all bans and picks first.";
     }
-    if (!this.currentGame.isFullyClaimed()) {
-      return "Not all players have claimed their gods yet.";
-    }
 
     this.undoStack.push({
       type: 'next_game',

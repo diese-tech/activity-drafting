@@ -93,24 +93,41 @@ export class DraftBoard {
     return this.state.currentCaptainId === this.myUserId;
   }
 
+  private isCaptain(): boolean {
+    if (!this.state) return false;
+    return (
+      this.state.blueCaptain.userId === this.myUserId ||
+      this.state.redCaptain.userId === this.myUserId
+    );
+  }
+
   private renderBoard(): void {
     const s = this.state!;
     const turn = s.currentTurn;
     const isMine = this.isMyTurn();
+    const captain = this.isCaptain();
+    const gameComplete = !turn;
 
     let statusHtml = '';
-    if (!turn) {
-      statusHtml = `<span class="status-complete">✅ Game complete — waiting for next game or end</span>`;
+    if (gameComplete) {
+      statusHtml = `<span class="status-complete">✅ Game ${s.gameNumber} complete</span>`;
     } else {
       const emoji = turn.team === 'blue' ? '🔵' : '🔴';
-      const captain = turn.team === 'blue' ? s.blueCaptain.name : s.redCaptain.name;
+      const captainName = turn.team === 'blue' ? s.blueCaptain.name : s.redCaptain.name;
       const highlight = isMine ? ' your-turn' : '';
-      statusHtml = `<span class="status-turn${highlight}">${emoji} <b>${captain}</b> — ${turn.action}</span>`;
+      statusHtml = `<span class="status-turn${highlight}">${emoji} <b>${captainName}</b> — ${turn.action}</span>`;
     }
 
     const fearlessHtml = s.fearlessPool.length
       ? `<div class="fearless-pool"><span class="label">🚫 Fearless Pool:</span> ${s.fearlessPool.join(', ')}</div>`
       : '';
+
+    const gameControls = gameComplete && captain ? `
+      <div class="game-controls">
+        <button id="nextGameBtn">▶ Next Game</button>
+        <button id="endDraftBtn" class="btn-secondary">🏁 End Draft</button>
+      </div>
+    ` : '';
 
     this.root.innerHTML = `
       <div class="board">
@@ -126,10 +143,11 @@ export class DraftBoard {
         </div>
 
         ${fearlessHtml}
+        ${gameControls}
 
         <div id="boardError" class="error hidden"></div>
 
-        ${isMine && turn ? this.renderGodSelector(s) : ''}
+        ${isMine && !gameComplete ? this.renderGodSelector(s) : ''}
       </div>
     `;
 
@@ -148,6 +166,15 @@ export class DraftBoard {
           const god = (btn as HTMLButtonElement).dataset.god!;
           this.client.send({ type: 'action', matchId: this.matchId!, god });
         });
+      });
+    }
+
+    if (gameComplete && captain) {
+      this.root.querySelector('#nextGameBtn')?.addEventListener('click', () => {
+        this.client.send({ type: 'next_game', matchId: this.matchId! });
+      });
+      this.root.querySelector('#endDraftBtn')?.addEventListener('click', () => {
+        this.client.send({ type: 'end', matchId: this.matchId! });
       });
     }
   }
