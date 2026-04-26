@@ -1,0 +1,9 @@
+{
+  "activity_app": {
+    "client_id": "1497756420811133030",
+    "oauth2_url": "https://discord.com/oauth2/authorize?client_id=1497756420811133030&response_type=code&redirect_uri=https%3A%2F%2Factivity-drafting-production.up.railway.app&scope=identify+rpc.activities.write",
+    "redirect_uri": "https://activity-drafting-production.up.railway.app",
+    "scopes": ["identify", "rpc.activities.write"],
+    "railway_url": "https://activity-drafting-production.up.railway.app"
+  }
+}
