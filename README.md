@@ -1,28 +1,42 @@
 # GodForge Drafts
 
-A fast Discord Activity for competitive pick and ban drafting.
+A fast Discord Activity for competitive pick and ban drafting between captains in separate team voice channels.
 
 ## Why This Exists
 
-Traditional drafting through Discord bot commands works, but it is slow.
+GodForge already has a drafting system, but command-based drafting can be too slow for live competitive matches.
 
-Captains must type commands for every pick and ban, wait for responses, and manually track draft state. During competitive matches this creates unnecessary friction and slows down the pre-game process.
+Captains must type commands for every pick and ban, wait for responses, and manually keep the draft moving. The existing flow can look clean, but it creates friction when teams are trying to get into a match quickly.
 
 GodForge Drafts was built to solve that problem.
 
-Instead of typing commands, captains join a shared draft room and complete the entire draft through an interactive interface designed specifically for competitive team play.
+Instead of typing commands, two captains join a shared draft room and complete the draft through an interactive Discord Activity interface.
 
-## The Problem
+## The Core Problem
 
-Most organized leagues face a few common issues:
+In competitive play, captains are usually not sitting in the same voice channel.
 
-- Drafting through text commands is slow.
-- Captains are often in separate team voice channels.
-- Teams need a clear view of picks, bans, and draft progression.
-- Admins need a reliable draft record.
-- Spectators may want to follow the draft without participating.
+A typical match setup looks like this:
 
-The goal is to reduce the time between "ready to draft" and "game launch".
+```txt
+Team A Captain -> Team A voice channel
+Team B Captain -> Team B voice channel
+```
+
+That separation is intentional. Each captain needs to talk privately with their own team while still drafting against the opposing captain.
+
+The challenge is creating one fast shared draft room that both captains can use without requiring them to be in the same call.
+
+## What GodForge Drafts Solves
+
+GodForge Drafts is designed to:
+
+- Replace slow command-by-command drafting with a fast UI.
+- Let captains draft from separate team voice channels.
+- Give admins and spectators a clear view of the draft.
+- Keep pick and ban state synchronized in real time.
+- Support competitive multi-game formats like Fearless draft.
+- Reduce the time between "ready to draft" and "game launch".
 
 ## Solution
 
@@ -30,15 +44,16 @@ GodForge Drafts provides:
 
 - Interactive pick and ban interface
 - Real-time draft updates
+- Shared draft rooms
+- Captain assignment by Discord ID
+- Captain-restricted draft actions
 - Fearless draft support
 - Multi-game draft tracking
-- Shared draft rooms
-- Captain-restricted actions
 - Spectator-friendly viewing
 
-The activity is designed to work regardless of where players are located within Discord.
+The activity is not meant to force both captains into the same Discord voice channel.
 
-Captains can remain in separate team voice channels while participating in the same draft room.
+It is meant to act as the shared draft room between two separate team environments.
 
 ## Core Design Philosophy
 
@@ -48,29 +63,29 @@ The activity prioritizes:
 2. Simplicity
 3. Competitive integrity
 
-If two captains can join a draft room and begin drafting within 30 seconds, the activity is doing its job.
+If two captains can join a draft room and start picks and bans within 30 seconds, the activity is doing its job.
 
 ## Typical Match Flow
 
 ### Step 1
 
-A captain creates a draft room.
+One captain creates a draft room.
 
 ### Step 2
 
-Blue and Red captains are assigned.
+Blue and Red captains are assigned by Discord ID.
 
 ### Step 3
 
-The activity generates a draft room identifier.
+The activity generates a draft room identifier or join link.
 
 ### Step 4
 
-The opposing captain joins the draft room.
+The room code or link is shared with the opposing captain.
 
 ### Step 5
 
-The draft begins.
+The opposing captain joins the same draft room from their own team voice channel.
 
 ### Step 6
 
@@ -78,7 +93,19 @@ Picks and bans are completed through the activity interface.
 
 ### Step 7
 
-The final draft is exported and recorded.
+Admins and spectators can observe the draft state.
+
+### Step 8
+
+The final draft is exported or recorded.
+
+## Current Behavior
+
+The current draft flow is room-based.
+
+Entering a captain's Discord ID assigns that user as a captain, but it does not automatically pull them into the room or open the activity for them.
+
+A captain must still join the draft room through the room code, join link, or activity flow.
 
 ## Fearless Draft Support
 
@@ -102,7 +129,7 @@ Draft order follows the configured competitive ruleset used by the league.
 
 ### Captains
 
-Complete picks and bans quickly.
+Create or join draft rooms and complete picks and bans quickly.
 
 ### League Administrators
 
@@ -114,9 +141,9 @@ Follow drafts without interacting.
 
 ## Long-Term Vision
 
-GodForge Drafts is part of the broader GodForge ecosystem.
+GodForge Drafts is part of the broader GodForge ecosystem, but it should also remain useful as a standalone competitive drafting tool.
 
-The long-term goal is to provide a complete competitive drafting platform while remaining useful as a standalone Discord Activity.
+The long-term goal is to provide a complete competitive drafting platform that can support GodForge leagues, independent communities, tournaments, and organized scrims.
 
 Potential future features include:
 
@@ -124,6 +151,9 @@ Potential future features include:
 - Match archives
 - Draft analytics
 - Shareable draft results
+- Copyable join links
+- Spectator mode
+- Admin override tools
 - Tournament integrations
 - League management tools
 - Team management tools
