@@ -6,6 +6,7 @@ import { DraftBoard } from './draft-board';
 type Auth = CommandResponse<'authenticate'>;
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
+const DISCORD_INSTALL_URL = 'https://discord.com/oauth2/authorize?client_id=1497756420811133030&permissions=0&integration_type=0&scope=applications.commands';
 
 if (isDiscordActivityLaunch()) {
 	app.textContent = 'Connecting to Discord...';
@@ -33,6 +34,10 @@ function renderLandingPage() {
 					GodForge Drafts is a Discord Activity for competitive communities that need clean draft lobbies,
 					team coordination, pick and ban phases, and shareable draft results.
 				</p>
+				<div class="landing-actions">
+					<a class="landing-primary" href="${DISCORD_INSTALL_URL}" target="_blank" rel="noreferrer">Add to Discord</a>
+					<a class="landing-secondary" href="/support">Get Support</a>
+				</div>
 				<nav class="landing-nav" aria-label="Legal and support links">
 					<a href="/terms">Terms of Service</a>
 					<a href="/privacy">Privacy Policy</a>
