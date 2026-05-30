@@ -1,21 +1,36 @@
 import type { Team, Action, TurnStep, ClaimInfo, GameExport } from './types.js';
 
 // Smite classic fearless draft sequence — 20 steps per game.
+// Rule: whichever team starts the current ban round also starts the following pick round.
+// Totals per team: 5 bans + 5 picks.
 export const TURN_SEQUENCE: TurnStep[] = [
   // Bans 1: B R B R B R
-  { team: 'blue', action: 'ban' }, { team: 'red', action: 'ban' },
-  { team: 'blue', action: 'ban' }, { team: 'red', action: 'ban' },
-  { team: 'blue', action: 'ban' }, { team: 'red', action: 'ban' },
-  // Picks 1: R B B R R B
-  { team: 'red', action: 'pick' }, { team: 'blue', action: 'pick' },
-  { team: 'blue', action: 'pick' }, { team: 'red', action: 'pick' },
-  { team: 'red', action: 'pick' }, { team: 'blue', action: 'pick' },
+  { team: 'blue', action: 'ban' },
+  { team: 'red', action: 'ban' },
+  { team: 'blue', action: 'ban' },
+  { team: 'red', action: 'ban' },
+  { team: 'blue', action: 'ban' },
+  { team: 'red', action: 'ban' },
+
+  // Picks 1: B R R B B R
+  { team: 'blue', action: 'pick' },
+  { team: 'red', action: 'pick' },
+  { team: 'red', action: 'pick' },
+  { team: 'blue', action: 'pick' },
+  { team: 'blue', action: 'pick' },
+  { team: 'red', action: 'pick' },
+
   // Bans 2: R B R B
-  { team: 'red', action: 'ban' }, { team: 'blue', action: 'ban' },
-  { team: 'red', action: 'ban' }, { team: 'blue', action: 'ban' },
-  // Picks 2: B R R B
-  { team: 'blue', action: 'pick' }, { team: 'red', action: 'pick' },
-  { team: 'red', action: 'pick' }, { team: 'blue', action: 'pick' },
+  { team: 'red', action: 'ban' },
+  { team: 'blue', action: 'ban' },
+  { team: 'red', action: 'ban' },
+  { team: 'blue', action: 'ban' },
+
+  // Picks 2: R B B R
+  { team: 'red', action: 'pick' },
+  { team: 'blue', action: 'pick' },
+  { team: 'blue', action: 'pick' },
+  { team: 'red', action: 'pick' },
 ];
 
 export const STEPS_PER_GAME = TURN_SEQUENCE.length;
